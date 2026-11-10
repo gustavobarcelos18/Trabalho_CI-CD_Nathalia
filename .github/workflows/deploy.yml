@@ -29,7 +29,7 @@ jobs:
       - name: Preparar artefato do Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: 'pasta-inexistente'
       - name: Publicar site
         id: deployment
         uses: actions/deploy-pages@v4
