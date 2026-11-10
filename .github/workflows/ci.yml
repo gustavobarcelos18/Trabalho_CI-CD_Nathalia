@@ -1,0 +1,17 @@
+name: Auditoria inicial da Jornada DevOps
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  auditoria:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checar arquivos estáticos sem checkout
+        run: |
+          ls -R
+          echo "Todos os arquivos foram carregados no Runner!"

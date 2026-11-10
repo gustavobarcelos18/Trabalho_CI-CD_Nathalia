@@ -1,0 +1,18 @@
+:root {
+  color-scheme: light;
+  font-family: system-ui, sans-serif;
+  color: #17304d;
+  background: #eef5fb;
+}
+
+body { margin: 0; }
+.cabecalho { background: #17304d; padding: 1.25rem; }
+nav { display: flex; flex-wrap: wrap; gap: 1.5rem; max-width: 60rem; margin: auto; }
+nav a { color: #fff; text-decoration: none; }
+nav a[aria-current="page"] { text-decoration: underline; }
+main { max-width: 60rem; min-height: 55vh; margin: auto; padding: 4rem 1.25rem; }
+h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
+p { max-width: 40rem; line-height: 1.6; }
+.icone { width: 5rem; height: 5rem; }
+.botao { display: inline-block; background: #126b70; color: #fff; padding: .75rem 1rem; border-radius: .35rem; }
+footer { padding: 1.5rem; text-align: center; }
