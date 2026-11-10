@@ -1,0 +1,13 @@
+{
+  "name": "jornada-devops",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "lint:html": "htmlhint \"*.html\"",
+    "lint:css": "stylelint \"css/**/*.css\""
+  },
+  "devDependencies": {
+    "htmlhint": "1.1.4",
+    "stylelint": "16.15.0"
+  }
+}

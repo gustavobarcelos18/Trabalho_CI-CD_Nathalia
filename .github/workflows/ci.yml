@@ -11,9 +11,18 @@ jobs:
   auditoria:
     runs-on: ubuntu-latest
     steps:
-      - name: Checar arquivos estáticos antes do checkout
+      - name: Checkout do código
+        uses: actions/checkout@v4
+      - name: Checar arquivos estáticos após checkout
         run: |
           ls -R
           echo "Todos os arquivos foram carregados no Runner!"
-      - name: Checkout do código
-        uses: actions/checkout@v4
+          echo "Arquivos HTML: $(find . -name '*.html' | wc -l)"
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Instalar dependências
+        run: npm ci
+      - name: Validar sintaxe do HTML
+        run: npm run lint:html
