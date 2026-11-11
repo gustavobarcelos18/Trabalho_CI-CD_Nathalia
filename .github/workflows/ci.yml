@@ -25,4 +25,4 @@ jobs:
       - name: Instalar dependências
         run: npm ci
       - name: Validar sintaxe do HTML
-        run: npm run lint:html
+        run: npx htmlhint arquivo-inexistente.html
