@@ -1,41 +1,63 @@
-name: Deploy da Jornada DevOps
+name: Validar e publicar Jornada DevOps
 
 on:
   push:
+    branches: [main]
+  pull_request:
     branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
   cancel-in-progress: false
 
 jobs:
-  validacao:
+  validar-html:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Smoke test
-        run: test -f index.html
+      - name: Checkout do código
+        uses: actions/checkout@v4
+      - name: Auditoria dos arquivos
+        run: |
+          ls -R
+          echo "Arquivos HTML: $(find . -name '*.html' | wc -l)"
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Instalar dependências
+        run: npm ci
+      - name: Validar sintaxe do HTML
+        run: npm run lint:html
       - name: Explorando o Runner
         run: |
           lsb_release -a
           free -h
           nproc
-  publicar-site:
-    needs: validacao
+
+  validar-css:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-      - name: Conferir página inicial
-        run: test -f index.html
+      - name: Checkout do código
+        uses: actions/checkout@v4
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Instalar dependências
+        run: npm ci
+      - name: Validar CSS
+        run: npm run lint:css
+
+  preparar-entrega:
+    needs: [validar-html, validar-css]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
       - name: Preparar pacote de distribuição
         run: |
           rm -rf dist
@@ -46,15 +68,25 @@ jobs:
           ls -R dist
       - name: Auditoria de Qualidade
         run: |
-          test -f dist/index.html
-          test -f dist/sobre.html
-          test -f dist/contato.html
-      - name: Configurar Pages
-        uses: actions/configure-pages@v5
+          test -f dist/index.html || { echo 'Arquivo não encontrado: dist/index.html'; exit 1; }
+          test -f dist/sobre.html || { echo 'Arquivo não encontrado: dist/sobre.html'; exit 1; }
+          test -f dist/contato.html || { echo 'Arquivo não encontrado: dist/contato.html'; exit 1; }
       - name: Preparar artefato do Pages
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
-      - name: Publicar site
+
+  publicar-site:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: preparar-entrega
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar no GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
