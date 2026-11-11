@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
+      - name: Smoke test da página inicial
+        run: test -f index.html
       - name: Auditoria dos arquivos
         run: |
           ls -R
@@ -76,7 +78,7 @@ jobs:
         with:
           path: dist
 
-  publicar-site:
+  deploy-site:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: preparar-entrega
     runs-on: ubuntu-latest
