@@ -15,7 +15,21 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  validacao:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Smoke test
+        run: test -f index.html
+      - name: Falha intencional
+        run: exit 1
+      - name: Explorando o Runner
+        run: |
+          lsb_release -a
+          free -h
+          nproc
   publicar-site:
+    needs: validacao
     runs-on: ubuntu-latest
     environment:
       name: github-pages
