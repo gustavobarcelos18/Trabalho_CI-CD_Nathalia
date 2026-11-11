@@ -22,8 +22,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - name: Executar comando inexistente
-        run: comando_que_nao_existe
       - name: Conferir página inicial
         run: test -f index.html
       - name: Configurar Pages
