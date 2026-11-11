@@ -26,14 +26,24 @@ jobs:
           lsb_release -a
           free -h
           nproc
+  instalar-ferramenta:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Instalar cowsay neste runner
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cowsay
+          /usr/games/cowsay 'Instalado neste job'
   publicar-site:
-    needs: validacao
+    needs: [validacao, instalar-ferramenta]
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - name: Usar ferramenta instalada no outro job
+        run: /usr/games/cowsay 'Outro job'
       - name: Conferir página inicial
         run: test -f index.html
       - name: Preparar pacote de distribuição
