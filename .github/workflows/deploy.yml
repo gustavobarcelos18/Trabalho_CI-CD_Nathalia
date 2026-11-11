@@ -71,7 +71,7 @@ jobs:
       - name: Auditoria de Qualidade
         run: |
           test -f dist/index.html || { echo 'Arquivo não encontrado: dist/index.html'; exit 1; }
-          test -f "dist/quem somos.html" || { echo 'Arquivo não encontrado: dist/quem somos.html'; exit 1; }
+          test -f dist/sobre.html || { echo 'Arquivo não encontrado: dist/sobre.html'; exit 1; }
           test -f dist/contato.html || { echo 'Arquivo não encontrado: dist/contato.html'; exit 1; }
       - name: Preparar artefato do Pages
         uses: actions/upload-pages-artifact@v3
