@@ -21,8 +21,6 @@ jobs:
       - uses: actions/checkout@v4
       - name: Smoke test
         run: test -f index.html
-      - name: Falha intencional
-        run: exit 1
       - name: Explorando o Runner
         run: |
           lsb_release -a
